@@ -1,0 +1,48 @@
+model:
+    global:
+        emb_dim: 128
+        model_name: "model"
+        n_bins: 1100
+        min_date: -300
+        max_date: 800
+        ppim: 10
+    encoder_sequence:
+        name: "encoder"
+        n_latents: 16
+        n_perceiver_blocks: 2
+        drop_prob: 0.1
+        rn_arch: "resnet18"
+        rn_pretrained: true
+        rn_depth_stages: 4
+        freeze_bn: false
+        use_selector: false
+        branches: ["ink"]
+    loss:
+        name: "ce_year"
+train:
+    loss_name: ["ce_cls"]
+    lr: 5e-4
+    n_eps: 100
+    batch_size: 32
+    weight_decay: 1e-4
+    device: 'cuda'
+    seed: 0
+    amp: true
+    eval_step: 10
+    save_every_eval: false
+    iters_per_epoch: 100
+    sampler_mode: "uniform"
+    workers: 8
+dataset:
+    im_sz: 128
+    root: "benchmarks/papydate"
+    cache_dir_name:
+        - "cache_papytwin_letters2"
+        - "cache_papytwin_letters2_dpl"
+        - "cache_papytwin_letters5_layout"
+        - "cache_papytwin_letters5_layout_dpl"
+    ink_ratio_min: 0.05
+    anchor_sigma_year: 10.0
+    anchor_year: true
+    ink_quantile: true
+    group_by_tm: true
